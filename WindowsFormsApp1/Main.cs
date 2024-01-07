@@ -968,8 +968,8 @@ namespace WindowsFormsApp1
             if (!axisOn[axis-1])//如果没使能axisOn[axis-1]=false
             {
                 r = GTN.mc.GTN_AxisOn(core, axis); //上伺服
-                Error_Code("GTN_AxisOn", r);
-            }
+            Error_Code("GTN_AxisOn", r);
+        }
             else
             {
                 r = GTN.mc.GTN_AxisOff(core, axis); //下伺服
@@ -987,6 +987,7 @@ namespace WindowsFormsApp1
         private void comboBoxAxis_SelectedIndexChanged(object sender, EventArgs e)
         {
             axis = short.Parse(comboBoxAxis.SelectedItem.ToString());
+            buttonEnable.Text = axis + "轴使能";
         }
 
         private void buttonMain_Click(object sender, EventArgs e)
