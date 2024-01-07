@@ -14,7 +14,7 @@ namespace WindowsFormsApp1
     public partial class Main : Form
     {
         public static short r;
-        public static string cfg;
+        string cfg = "gtn_core.cfg";
         public static bool[] axisOn = new bool[8];
         public static short core = 1;
         public static short axis = 1;
@@ -22,26 +22,9 @@ namespace WindowsFormsApp1
         public Main()
         {
             InitializeComponent();
+            
         }
-        private bool Check()
-        {
-            if (cfg == null)
-            {
-                MessageBox.Show("配置文件未加载！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return true;
-            }
-            else if (core == default(short))
-            {
-                MessageBox.Show("未选择核！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return true;
-            }
-            else if(axis == default(short))
-            {
-                MessageBox.Show("未选择轴！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return true;
-            }
-            return false;
-        }
+
         private void Main_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.C)
@@ -901,6 +884,10 @@ namespace WindowsFormsApp1
             {
                 MessageBox.Show("开卡成功！");
             }
+            this.comboBoxAxis.SelectedIndex = 0;
+            this.comboBoxCore.SelectedIndex = 0;
+            timer1.Interval = 100;
+            timer1.Tick += new EventHandler(timer1_Tick);
             timer1.Start();
         }
         private void infoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -919,10 +906,6 @@ namespace WindowsFormsApp1
             if (openFileDialog1.ShowDialog() == DialogResult.OK) // 如果用户选择了文件并点击了“打开”按钮  
             {
                 cfg = openFileDialog1.FileName; // 获取所选文件的完整路径  
-                if(Check())
-                {
-                    return;
-                }
                 r = GTN_LoadConfig(core, cfg);
                 Error_Code("GTN_LoadConfig", r);
                 MessageBox.Show($"您选择了文件: {cfg}"); // 显示一个消息框，告知用户所选文件的路径  
@@ -933,43 +916,32 @@ namespace WindowsFormsApp1
 
         private void buttonInit_Click(object sender, EventArgs e)
         {
-            r = GTN_Open(5, 1);
-            if (r != 0)
-            {
-                Error_Code("GTN_Open", r);
-                return;
-            }
-            if (Check())
-            {
-                return;
-            }
-            r = GTN_Reset(core);
-            Error_Code("GTN_Reset", r);
+            r = GTN_LoadConfig(core, cfg);
+            Error_Code("LoadCofig", r);
+            r = GTN_ClrSts(core, axis, 1);
+            Error_Code("ClrSts", r);
+            if (r == 0)
             textBoxInform.Text = "初始化已完成！";
         }
 
         private void buttonClr_Click(object sender, EventArgs e)
         {
-            if (Check())
-            {
-                return;
-            }
             r = GTN_ClrSts(core,axis,1);
-            textBoxInform.Text = "清除成功！";
+            Error_Code("ClrSts", r);
+            if (r == 0)
+            textBoxInform.Text = "清除状态成功！";
 
         }
 
         private void buttonEnable_Click(object sender, EventArgs e)
         {
-            if (Check())
-            {
-                return;
-            }
+            axis = Convert.ToInt16(this.comboBoxAxis.SelectedIndex + 1);
+            core = Convert.ToInt16(this.comboBoxCore.SelectedIndex + 1);
             if (!axisOn[axis-1])//如果没使能axisOn[axis-1]=false
             {
                 r = GTN.mc.GTN_AxisOn(core, axis); //上伺服
-                Error_Code("GTN_AxisOn", r);
-            }
+            Error_Code("GTN_AxisOn", r);
+        }
             else
             {
                 r = GTN.mc.GTN_AxisOff(core, axis); //下伺服
@@ -978,16 +950,6 @@ namespace WindowsFormsApp1
             axisOn[axis - 1] = !axisOn[axis - 1];
         }
 
-        private void comboBoxCore_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            core = short.Parse(comboBoxCore.SelectedItem.ToString());
-
-        }
-
-        private void comboBoxAxis_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            axis = short.Parse(comboBoxAxis.SelectedItem.ToString());
-        }
 
         private void buttonMain_Click(object sender, EventArgs e)
         {
@@ -1005,15 +967,20 @@ namespace WindowsFormsApp1
         private void markingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UserControl Marking = new Marking();
-            this.panelMain.Controls.Add(Marking);
+            ReplaceUserControl(Marking);
         }
 
         private void jogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UserControl Jog = new Jog(timer1);
-            this.panelMain.Controls.Add(Jog);
+            UserControl Jog = new Jog();
+            ReplaceUserControl(Jog);
         }
-
+        private void ReplaceUserControl(UserControl newUserControl)
+        {
+            panelMain.Controls.Clear(); // 移除panel中的所有控件
+            panelMain.Controls.Add(newUserControl); // 添加新的用户控件
+            newUserControl.Dock = DockStyle.Fill; // 使新控件填满面板
+        }
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (!axisOn[axis - 1])//如果使能状态为false，反转
@@ -1026,6 +993,7 @@ namespace WindowsFormsApp1
         {
             r = GTN.mc.GTN_ZeroPos(core, 1, 1);
             Error_Code("GTN_ZeroPos", r);
+            textBoxInform.Text = "位置清除成功！";
         }
 
         private void resetToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1037,6 +1005,19 @@ namespace WindowsFormsApp1
             r = GTN_Reset(core);
             Error_Code("GTN_Reset", r);
             textBoxInform.Text = ("复位所有轴成功！");
+        }
+
+        public Timer GetSharedTimer()
+        {
+            return timer1;
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            r = GTN_Reset(core);
+            Error_Code("GTN_Reset", r);
+            if (r == 0)
+            textBoxInform.Text = "复位成功！";
         }
     }
 }

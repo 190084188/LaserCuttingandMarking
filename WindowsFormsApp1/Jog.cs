@@ -14,7 +14,7 @@ namespace WindowsFormsApp1
     public partial class Jog : UserControl
     {
         //核号、轴号变量
-        short core = Main.core;
+        const short core = 1;
         short axis = Main.axis;
         //运动参数  
         double vel;
@@ -24,12 +24,32 @@ namespace WindowsFormsApp1
         private Timer timer;
         uint clk;
         short r = 0;
-        public Jog(Timer sharedTimer)
+        public Jog()
         {
             InitializeComponent();
-            timer = sharedTimer;
-            timer.Tick += new EventHandler(timer1_Tick);
         }
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            InitializeTimer();
+        }
+
+        private void InitializeTimer()
+        {
+            Main mainForm = this.FindForm() as Main;
+            if (mainForm != null)
+            {
+                // 从Main获取定时器
+                timer = mainForm.GetSharedTimer();
+                // 这里可以添加定时器的事件处理，如果需要的话
+                timer.Tick += timer_Tick;
+            }
+            else
+            {
+                MessageBox.Show("ParentForm不是Main或还未设置");
+            }
+        }
+
         private void buttonPoMove_MouseDown(object sender, MouseEventArgs e)
         {
             jog.acc = double.Parse(textBoxAcc.Text);
@@ -51,6 +71,8 @@ namespace WindowsFormsApp1
             r = GTN_Stop(core, 1 << (axis - 1), 0);   // 0为平滑停止，1为急停
             Main.Error_Code("GTN_Stop", r);
         }
+
+
         private void buttonNeMove_MouseDown(object sender, MouseEventArgs e)
         {
             jog.acc = double.Parse(textBoxAcc.Text);
@@ -71,7 +93,7 @@ namespace WindowsFormsApp1
             r = GTN_Stop(core, 1 << (axis - 1), 0);   // 0为平滑停止，1为急停
             Main.Error_Code("GTN_Stop", r);
         }
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timer_Tick(object sender, EventArgs e)
         {
             GTN_GetPrfPos(core, axis, out prfpos, 1, out clk);
             textBoxPrfPos.Text = prfpos.ToString();

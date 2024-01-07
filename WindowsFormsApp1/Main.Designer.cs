@@ -65,11 +65,13 @@ namespace WindowsFormsApp1
             this.textBoxInform = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.buttonZeroPos = new System.Windows.Forms.Button();
+            this.buttonReset = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctrlToolStripMenuItem,
             this.fileToolStripMenuItem,
@@ -96,20 +98,20 @@ namespace WindowsFormsApp1
             this.resetToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.resetToolStripMenuItem1});
             this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
-            this.resetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.resetToolStripMenuItem.Text = "复位运动控制卡";
             // 
             // resetToolStripMenuItem1
             // 
             this.resetToolStripMenuItem1.Name = "resetToolStripMenuItem1";
-            this.resetToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.resetToolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
             this.resetToolStripMenuItem1.Text = "复位核所有轴";
             this.resetToolStripMenuItem1.Click += new System.EventHandler(this.resetToolStripMenuItem1_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.exitToolStripMenuItem.Text = "退出";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -209,7 +211,7 @@ namespace WindowsFormsApp1
             // labelAxis
             // 
             this.labelAxis.AutoSize = true;
-            this.labelAxis.Location = new System.Drawing.Point(12, 72);
+            this.labelAxis.Location = new System.Drawing.Point(12, 96);
             this.labelAxis.Name = "labelAxis";
             this.labelAxis.Size = new System.Drawing.Size(41, 12);
             this.labelAxis.TabIndex = 1;
@@ -228,16 +230,15 @@ namespace WindowsFormsApp1
             "6",
             "7",
             "8"});
-            this.comboBoxAxis.Location = new System.Drawing.Point(59, 69);
+            this.comboBoxAxis.Location = new System.Drawing.Point(59, 93);
             this.comboBoxAxis.Name = "comboBoxAxis";
             this.comboBoxAxis.Size = new System.Drawing.Size(52, 20);
             this.comboBoxAxis.TabIndex = 2;
-            this.comboBoxAxis.SelectedIndexChanged += new System.EventHandler(this.comboBoxAxis_SelectedIndexChanged);
             // 
             // labelCore
             // 
             this.labelCore.AutoSize = true;
-            this.labelCore.Location = new System.Drawing.Point(12, 38);
+            this.labelCore.Location = new System.Drawing.Point(12, 62);
             this.labelCore.Name = "labelCore";
             this.labelCore.Size = new System.Drawing.Size(41, 12);
             this.labelCore.TabIndex = 1;
@@ -250,11 +251,10 @@ namespace WindowsFormsApp1
             this.comboBoxCore.Items.AddRange(new object[] {
             "1",
             "2"});
-            this.comboBoxCore.Location = new System.Drawing.Point(59, 35);
+            this.comboBoxCore.Location = new System.Drawing.Point(59, 59);
             this.comboBoxCore.Name = "comboBoxCore";
             this.comboBoxCore.Size = new System.Drawing.Size(52, 20);
             this.comboBoxCore.TabIndex = 2;
-            this.comboBoxCore.SelectedIndexChanged += new System.EventHandler(this.comboBoxCore_SelectedIndexChanged);
             // 
             // openFileDialog1
             // 
@@ -264,7 +264,7 @@ namespace WindowsFormsApp1
             // 
             // buttonLoadCfg
             // 
-            this.buttonLoadCfg.Location = new System.Drawing.Point(23, 163);
+            this.buttonLoadCfg.Location = new System.Drawing.Point(14, 231);
             this.buttonLoadCfg.Name = "buttonLoadCfg";
             this.buttonLoadCfg.Size = new System.Drawing.Size(88, 23);
             this.buttonLoadCfg.TabIndex = 3;
@@ -274,7 +274,7 @@ namespace WindowsFormsApp1
             // 
             // buttonInit
             // 
-            this.buttonInit.Location = new System.Drawing.Point(23, 134);
+            this.buttonInit.Location = new System.Drawing.Point(14, 202);
             this.buttonInit.Name = "buttonInit";
             this.buttonInit.Size = new System.Drawing.Size(88, 23);
             this.buttonInit.TabIndex = 4;
@@ -284,7 +284,7 @@ namespace WindowsFormsApp1
             // 
             // buttonClr
             // 
-            this.buttonClr.Location = new System.Drawing.Point(23, 192);
+            this.buttonClr.Location = new System.Drawing.Point(14, 260);
             this.buttonClr.Name = "buttonClr";
             this.buttonClr.Size = new System.Drawing.Size(88, 23);
             this.buttonClr.TabIndex = 4;
@@ -294,7 +294,7 @@ namespace WindowsFormsApp1
             // 
             // buttonEnable
             // 
-            this.buttonEnable.Location = new System.Drawing.Point(23, 250);
+            this.buttonEnable.Location = new System.Drawing.Point(14, 318);
             this.buttonEnable.Name = "buttonEnable";
             this.buttonEnable.Size = new System.Drawing.Size(88, 23);
             this.buttonEnable.TabIndex = 5;
@@ -312,7 +312,7 @@ namespace WindowsFormsApp1
             // 
             // buttonMain
             // 
-            this.buttonMain.Location = new System.Drawing.Point(23, 449);
+            this.buttonMain.Location = new System.Drawing.Point(14, 398);
             this.buttonMain.Name = "buttonMain";
             this.buttonMain.Size = new System.Drawing.Size(88, 23);
             this.buttonMain.TabIndex = 7;
@@ -322,9 +322,9 @@ namespace WindowsFormsApp1
             // 
             // textBoxInform
             // 
-            this.textBoxInform.Location = new System.Drawing.Point(0, 508);
+            this.textBoxInform.Location = new System.Drawing.Point(14, 504);
             this.textBoxInform.Name = "textBoxInform";
-            this.textBoxInform.Size = new System.Drawing.Size(111, 21);
+            this.textBoxInform.Size = new System.Drawing.Size(88, 21);
             this.textBoxInform.TabIndex = 8;
             this.textBoxInform.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -334,7 +334,7 @@ namespace WindowsFormsApp1
             // 
             // buttonZeroPos
             // 
-            this.buttonZeroPos.Location = new System.Drawing.Point(23, 221);
+            this.buttonZeroPos.Location = new System.Drawing.Point(14, 289);
             this.buttonZeroPos.Name = "buttonZeroPos";
             this.buttonZeroPos.Size = new System.Drawing.Size(88, 23);
             this.buttonZeroPos.TabIndex = 9;
@@ -342,11 +342,22 @@ namespace WindowsFormsApp1
             this.buttonZeroPos.UseVisualStyleBackColor = true;
             this.buttonZeroPos.Click += new System.EventHandler(this.buttonZeroPos_Click);
             // 
+            // buttonReset
+            // 
+            this.buttonReset.Location = new System.Drawing.Point(14, 173);
+            this.buttonReset.Name = "buttonReset";
+            this.buttonReset.Size = new System.Drawing.Size(88, 23);
+            this.buttonReset.TabIndex = 10;
+            this.buttonReset.Text = "复位";
+            this.buttonReset.UseVisualStyleBackColor = true;
+            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.buttonReset);
             this.Controls.Add(this.buttonZeroPos);
             this.Controls.Add(this.textBoxInform);
             this.Controls.Add(this.buttonMain);
@@ -408,8 +419,9 @@ namespace WindowsFormsApp1
         private Panel panelMain;
         private Button buttonMain;
         private TextBox textBoxInform;
-        private Timer timer1;
+        public Timer timer1;
         private Button buttonZeroPos;
+        private Button buttonReset;
     }
 }
 
